@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monthly Capacity</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F7F4EF;
+    padding: 32px 28px 36px;
+    min-height: 100vh;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: #C4573A;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #D9D3C9;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E8E3DC;
+    border-radius: 10px;
+    padding: 20px 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(28,26,23,0.07); }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #8A8378;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .card-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+  }
+  .card:nth-child(1) .card-number { color: #C4573A; }
+  .card:nth-child(2) .card-number { color: #7A9E87; }
+  .card:nth-child(3) .card-number { color: #6B80B8; }
+
+  .card-desc {
+    font-size: 12px;
+    color: #8A8378;
+    line-height: 1.55;
+    flex: 1;
+    margin-bottom: 14px;
+  }
+
+  .bar-track {
+    height: 4px;
+    background: #EDE8E2;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+  .card:nth-child(1) .bar-fill { background: #C4573A; }
+  .card:nth-child(2) .bar-fill { background: #7A9E87; }
+  .card:nth-child(3) .bar-fill { background: #6B80B8; }
+
+  .card-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+  .card-status {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .status-open { background: #E8F0EA; color: #5A8A68; }
+  .status-mid { background: #FDF3E3; color: #A07030; }
+  .status-full { background: #F9E8E4; color: #C4573A; }
+
+  .card-counter {
+    font-size: 11px;
+    color: #8A8378;
+  }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .step-btn {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid #D9D3C9;
+    background: white;
+    color: #5A5550;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .step-btn:hover { background: #F7F4EF; border-color: #B8B0A8; }
+  .step-btn:active { transform: scale(0.92); }
+  .step-label { font-size: 11px; color: #8A8378; min-width: 40px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="section-title">Your Monthly Capacity</div>
+
+<div class="cards">
+  <div class="card" id="card-0">
+    <div class="card-label">Large Projects</div>
+    <div class="card-number" id="num-0">0</div>
+    <div class="card-desc">Full website · ₱45k–₱90k range · one per month max</div>
+    <div class="bar-track"><div class="bar-fill" id="bar-0"></div></div>
+    <div class="card-controls">
+      <span class="card-status status-open" id="status-0">🟢 Open</span>
+      <span class="card-counter" id="count-0">0 / 1</span>
+    </div>
+    <div class="stepper">
+      <button class="step-btn" onclick="change(0,-1)">−</button>
+      <span class="step-label" id="step-label-0">Active: 0</span>
+      <button class="step-btn" onclick="change(0,1)">+</button>
+    </div>
+  </div>
+
+  <div class="card" id="card-1">
+    <div class="card-label">Mid Projects</div>
+    <div class="card-number" id="num-1">0</div>
+    <div class="card-desc">Smaller sites · ₱18k range · 1–2 starts per 2 weeks</div>
+    <div class="bar-track"><div class="bar-fill" id="bar-1"></div></div>
+    <div class="card-controls">
+      <span class="card-status status-open" id="status-1">🟢 Open</span>
+      <span class="card-counter" id="count-1">0 / 3</span>
+    </div>
+    <div class="stepper">
+      <button class="step-btn" onclick="change(1,-1)">−</button>
+      <span class="step-label" id="step-label-1">Active: 0</span>
+      <button class="step-btn" onclick="change(1,1)">+</button>
+    </div>
+  </div>
+
+  <div class="card" id="card-2">
+    <div class="card-label">Sales Pages</div>
+    <div class="card-number" id="num-2">0</div>
+    <div class="card-desc">Standalone pages · lighter lift · stackable</div>
+    <div class="bar-track"><div class="bar-fill" id="bar-2"></div></div>
+    <div class="card-controls">
+      <span class="card-status status-open" id="status-2">🟢 Open</span>
+      <span class="card-counter" id="count-2">0 / 10</span>
+    </div>
+    <div class="stepper">
+      <button class="step-btn" onclick="change(2,-1)">−</button>
+      <span class="step-label" id="step-label-2">Active: 0</span>
+      <button class="step-btn" onclick="change(2,1)">+</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const maxValues = [1, 3, 10];
+  const active = [0, 0, 0];
+
+  function getStatus(a, m) {
+    if (a >= m) return { text: '🔴 Full', cls: 'status-full' };
+    if (a >= m * 0.6) return { text: '🟡 Getting full', cls: 'status-mid' };
+    return { text: '🟢 Open', cls: 'status-open' };
+  }
+
+  function update(i) {
+    const a = active[i], m = maxValues[i];
+    const pct = Math.min(a / m * 100, 100);
+    const st = getStatus(a, m);
+
+    document.getElementById('num-' + i).textContent = a;
+    document.getElementById('bar-' + i).style.width = pct + '%';
+    document.getElementById('count-' + i).textContent = a + ' / ' + m;
+    document.getElementById('step-label-' + i).textContent = 'Active: ' + a;
+
+    const statusEl = document.getElementById('status-' + i);
+    statusEl.textContent = st.text;
+    statusEl.className = 'card-status ' + st.cls;
+  }
+
+  function change(i, delta) {
+    const m = maxValues[i];
+    active[i] = Math.max(0, Math.min(m, active[i] + delta));
+    update(i);
+  }
+
+  // animate bars on load
+  setTimeout(() => { [0,1,2].forEach(i => update(i)); }, 100);
+</script>
+</body>
+</html>
